@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %} {% endblock %}
+{% block header %} {% endblock %}
+{% block content %}
+<main role="main" class="container">
+        <div class="row">
+                <div class="col-md-3 mb-3 mt-1">
+                        {% include 'includes/author_card.html' %}
+                </div>
+
+                <div class="col-md-9">
+                        <div class="card mb-3 mt-1 shadow-sm">
+                                {% include 'includes/body_card.html' %}
+                        </div>
+                        {% include 'includes/comments.html' %}
+                </div>
+        </div>
+</main>
+{% endblock %}

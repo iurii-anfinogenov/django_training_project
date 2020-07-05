@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Последние обновления на сайте{{ user.username }}{% endblock %}
+{% block header %}Последние обновления на сайте{% endblock %}
+{% block content %}
+{% load thumbnail %}
+{% load cache %}
+{% comment %} {% cache 1200 index_page request.user.username %} {% endcomment %}
+{% include "includes/menu.html" with index=True %}
+{% for post in page %}
+{% include 'includes/body_card.html' %}
+{% endfor %}
+{% comment %} {% endcache %} {% endcomment %}
+{% if page.has_other_pages %}
+{% include "paginator.html" with items=page paginator=paginator %}
+{% endif %}
+
+{% endblock %}
