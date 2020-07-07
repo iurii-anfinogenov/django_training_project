@@ -27,7 +27,7 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    posts = group.posts.all()
+    posts = Post.objects.filter(group=group).all()
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -96,15 +96,14 @@ def post_edit(request, username, post_id):
 @login_required
 def add_comment(request, username, post_id):
     post = get_object_or_404(Post, author__username=username, pk=post_id)
-    comment = Comment.objects.filter(post=post_id)
-    if request.method == 'POST':
-        form = CommentForm(request.POST or None)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.author = request.user
-            form.post = post
-            form.save()
-            return redirect('post', username=post.author, post_id=post_id)
+    form = CommentForm(request.POST or None)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.author = request.user
+        comment.post = post
+        form.save()
+    return redirect('post', username=post.author,
+                    post_id=post_id)
 
 
 def page_not_found(request, exception):
@@ -154,5 +153,3 @@ def profile_unfollow(request, username):
     if followobj:
         followobj.delete()
     return redirect('profile', username=username)
-
-
